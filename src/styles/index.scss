@@ -1,5 +1,31 @@
-$body-color: yellow;
+@charset "UTF-8";
+
+@import "variables";
+
+* {
+  outline: none!important;
+  font-family: 'Ubuntu', sans-serif;
+  padding: 0;
+  margin: 0;
+}
 
 body {
+  background-color: $body-background;
   color: $body-color;
+}
+
+
+.container {
+  background-color: $white;
+  box-shadow: 0 -3px 10px 0 rgba(0, 0, 0, 0.175);
+  min-height: 700px;
+}
+
+.output {
+  word-break: break-word;
+}
+
+input.url {
+  font-size: 0.8em;
+  text-align: right;
 }

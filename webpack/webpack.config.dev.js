@@ -4,7 +4,7 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const Webpack = require('webpack');
 const Path = require('path');
-
+const DEFAULT_PORT = 8090;
 const dest = Path.join(__dirname, '../dist');
 
 module.exports = merge(common, {
@@ -12,7 +12,11 @@ module.exports = merge(common, {
   devtool: 'cheap-eval-source-map',
   devServer: {
     contentBase: dest,
-    inline: true
+    inline: true,
+    port: 3000,
+    allowedHosts: [
+      'hdev.digicol.com'
+    ]
   },
   plugins: [
     new Webpack.DefinePlugin({

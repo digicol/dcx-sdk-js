@@ -2,12 +2,222 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link media="all" rel="stylesheet" href="style.css" />
-  <title>aaa</title>
+  <title>DCX JS SDK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <script
+    src="//code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
 </head>
 <body>
 
-<h1>aaabb</h1>
+
+  <div class="container pt-4">
+    <div class="col-12 my-5 text-center">
+      <h3>DCX JS SDK</h3>
+    </div>
+    <div class="col-6 offset-3 border my-3 p-2 text-center">
+        <label for="api__url">DCX URL</label>
+        <input type="text" name="api_url" id="api__url" value="https://dcxtrunk.digicol.de/dcx_trunk/" class="form-control url" />
+    </div>
+    <!-- Login -->
+    <div class="col-12 border">
+      <div class="row">
+        <div class="col-6 login__wrapper">
+          <div class="col-12 mt-4"><h3>Login</h3></div>
+          <div class="col-12 mt-3">/oauth/token</div>
+          <form id="login__form" class="form-group p-3" action="#" type="POST">
+            <input type="hidden" value="/oauth/token" id="login__url"/>
+            <div class="mt-3 col-7 offset-4">
+              <label for="login__username">Username</label>
+              <input type="text" name="username" value="dc_fleginsky" class="form-control" id="login__username" />
+            </div>
+            <div class="mt-3 col-7 offset-4">
+              <label for="login__password">Password</label>
+              <input type="text" name="password" value="Welcome2DC" class="form-control" id="login__password"/>
+            </div>
+            <div class="mt-3 col-6 offset-5"><input type="submit" value="Login" class="form-control btn btn-primary"/></div>
+          </form>
+        </div>
+        <div class="col-5 offset-1 login__output__wrapper pt-5">
+          <div class="status alert" role="alert"></div>
+          <div class="d-inline-block output alert alert-primary">...</div>
+        </div>
+      </div>
+    </div>
+    <!-- /Login -->
+
+    <!-- Get object -->
+    <div class="col-12 border mt-5">
+      <div class="row">
+        <div class="col-6 getobj__wrapper">
+          <div class="col-12 mt-4"><h3>Get Object</h3></div>
+          <div class="col-12 mt-3">/api/{objectType}/</div>
+          <form id="getobj__form" class="p-3 offset-1 form-group" action="#" type="POST">
+
+            <div class="mt-3 col-10 offset-2">
+              <label for="getobj__field">Object type</label>
+              <select name="url"  class="form-control" id="getobj__type">
+                <option value="channel">channel</option>
+                <option value="comment">comment</option>
+                <option value="configdef">configdef</option>
+                <option value="configsetting">configsetting</option>
+                <option value="device">device</option>
+                <option value="doclink">doclink</option>
+                <option value="doctorprof">doctorprof</option>
+                <option value="doctoutag">doctoutag</option>
+                <option value="document" selected>document</option>
+                <option value="documentation">documentation</option>
+                <option value="file">file</option>
+                <option value="flag">flag</option>
+                <option value="flagfunction">flagfunction</option>
+                <option value="formcomponentconfig">formcomponentconfig</option>
+                <option value="job">job</option>
+                <option value="menuitem">menuitem</option>
+                <option value="permdef">permdef</option>
+                <option value="permission">permission</option>
+                <option value="pool">pool</option>
+                <option value="pubinfo">pubinfo</option>
+                <option value="rights">rights</option>
+                <option value="rightsprofile">rightsprofile</option>
+                <option value="role">role</option>
+                <option value="schedule">schedule</option>
+                <option value="script">script</option>
+                <option value="share">share</option>
+                <option value="story">story</option>
+                <option value="tagdef">tagdef</option>
+                <option value="taggroupconfig">taggroupconfig</option>
+                <option value="textindex">textindex</option>
+                <option value="tm_association">tm_association</option>
+                <option value="tm_occurrence">tm_occurrence</option>
+                <option value="tm_topic">tm_topic</option>
+                <option value="translation">translation</option>
+                <option value="usersetting">usersetting</option>
+                <option value="usertag">usertag</option>
+                <option value="webactiondef">webactiondef</option>
+                <option value="workflow">workflow</option>
+                <option value="workflowstep">workflowstep</option>
+              </select>
+            </div>
+
+            <div class="mt-3 col-12">
+              <label for="getobj__id">Object ID</label>
+              <input type="text" name="objectid" value="monroex5xdx7s0q9gok9b9ap2x" class="form-control" id="getobj__id"/>
+            </div>
+            <div class="mt-3 col-12">
+              <label for="getobj__field">Field</label>
+              <input type="text" name="url" value="Headline" placeholder="Field Name" class="form-control" id="getobj__field"/>
+            </div>
+
+            <div class="form-inline col-11  mt-3">
+              <div class="form-check">
+                <input type="checkbox" name="alldata" class="form-check-input" id="getobj__alldata"/>
+                <label for="getobj__alldata">Get ALL</label>
+              </div>
+              <div class="ml-3 form-check">
+                <input type="checkbox" name="alldata" class="form-check-input" id="getobj__checkexists"/>
+                <label for="getobj__checkexists">Check existance</label>
+              </div>
+            </div>
+
+            <div class="mt-5 col-6 offset-5 form-group">
+              <input type="submit" value="Get object" class="form-control btn btn-primary"/>
+            </div>
+          </form>
+        </div>
+        <div class="col-5 offset-1 getobj__output__wrapper pt-5">
+          <div class="status alert" role="alert"></div>
+          <div class="d-inline-block output alert alert-primary">...</div>
+        </div>
+      </div>
+    </div>
+    <!-- /Get object -->
+
+    <!-- Set object -->
+    <div class="col-12 border mt-5">
+      <div class="row">
+        <div class="col-6 setobj__wrapper">
+          <div class="col-12 mt-4"><h3>Set Object</h3></div>
+          <div class="col-12 mt-3">/api/{objectType}/</div>
+          <form id="setobj__form" class="form-group p-3 offset-1 form-group" action="#" type="POST">
+            <div class="mt-3 col-10 offset-2">
+              <label for="getobj__field">Object type</label>
+              <select name="url" class="form-control" id="setobj__type">
+                <option value="channel">channel</option>
+                <option value="comment">comment</option>
+                <option value="configdef">configdef</option>
+                <option value="configsetting">configsetting</option>
+                <option value="device">device</option>
+                <option value="doclink">doclink</option>
+                <option value="doctorprof">doctorprof</option>
+                <option value="doctoutag">doctoutag</option>
+                <option value="document" selected>document</option>
+                <option value="documentation">documentation</option>
+                <option value="file">file</option>
+                <option value="flag">flag</option>
+                <option value="flagfunction">flagfunction</option>
+                <option value="formcomponentconfig">formcomponentconfig</option>
+                <option value="job">job</option>
+                <option value="menuitem">menuitem</option>
+                <option value="permdef">permdef</option>
+                <option value="permission">permission</option>
+                <option value="pool">pool</option>
+                <option value="pubinfo">pubinfo</option>
+                <option value="rights">rights</option>
+                <option value="rightsprofile">rightsprofile</option>
+                <option value="role">role</option>
+                <option value="schedule">schedule</option>
+                <option value="script">script</option>
+                <option value="share">share</option>
+                <option value="story">story</option>
+                <option value="tagdef">tagdef</option>
+                <option value="taggroupconfig">taggroupconfig</option>
+                <option value="textindex">textindex</option>
+                <option value="tm_association">tm_association</option>
+                <option value="tm_occurrence">tm_occurrence</option>
+                <option value="tm_topic">tm_topic</option>
+                <option value="translation">translation</option>
+                <option value="usersetting">usersetting</option>
+                <option value="usertag">usertag</option>
+                <option value="webactiondef">webactiondef</option>
+                <option value="workflow">workflow</option>
+                <option value="workflowstep">workflowstep</option>
+              </select>
+            </div>
+
+            <div class="mt-3 col-12">
+              <label for="setobj__id">Document ID</label>
+              <input type="text" name="documentid" value="monroex5xdx7s0q9gok9b9ap2x" class="form-control" id="setobj__id"/>
+            </div>
+
+            <div class="mt-3 col-12">
+              <label for="setobj__fieldname">Field Name</label>
+              <input type="text" name="fieldname" value="Headline" class="form-control" id="setobj__fieldname"/>
+            </div>
+            <div class="mt-3 col-12">
+              <label for="setobj__fieldvalue">Field Value</label>
+              <input type="text" name="fieldname" value="NewValue" class="form-control" id="setobj__fieldvalue"/>
+            </div>
+            <div class="mt-3 col-6 offset-5">
+              <input type="submit" value="Set object" class="form-control btn btn-primary"/>
+            </div>
+          </form>
+        </div>
+        <div class="col-5 offset-1 setobj__output__wrapper pt-5">
+          <div class="status alert" role="alert"></div>
+          <div class="d-inline-block output alert alert-primary">...</div>
+        </div>
+      </div>
+    </div>
+    <!-- /Set object -->
+
+  </div>
 
 </body>
 </html>
