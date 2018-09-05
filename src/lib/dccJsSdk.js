@@ -4,7 +4,6 @@ exports.init = function(init) {
   return this;
 };
 
-// exports.baseUrl = exports.bearer = '';
 exports.baseUrl = '';
 exports.apiUrl = 'api/';
 exports.bearer = false;
@@ -35,6 +34,18 @@ exports.login = function(actionData) {
 
 };
 
+exports.getObject = function(actionData) {
+  if(!exports.bearer) { return exports.loginFail(); }
+
+  let requestObj = {
+    'method': 'GET',
+    'dataType': 'application/x-www-form-urlencoded',
+    'bearer': exports.bearer,
+    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '/' +  actionData.id + '?' + exports.parseObjUrl(actionData.query),
+    'dataObjEncoded': ''
+  };
+  return exports.reqPromise(requestObj);
+};
 
 exports.getObjects = function(actionData) {
   if(!exports.bearer) { return exports.loginFail(); }
@@ -43,7 +54,7 @@ exports.getObjects = function(actionData) {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
     'bearer': exports.bearer,
-    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query),
+    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '/' + '?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);
@@ -147,7 +158,7 @@ exports.invokeaction = function(actionData) {
     'method': 'POST',
     'dataType': 'application/json; charset=UTF-8',
     'bearer': exports.bearer,
-    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '/' + actionData.id + '/actions/' + actionData.method +'/invoke?' + exports.parseObjUrl(actionData.payload),
+    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '/' + actionData.id + '/actions/' + actionData.method +'/invoke?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);
@@ -248,4 +259,3 @@ exports.loginFail = function(objData) {
     });
   });
 };
-

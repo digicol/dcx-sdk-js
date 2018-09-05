@@ -1,9 +1,6 @@
 import '../styles/index.scss';
 let sdkClient = require('../lib/dccJsSdk');
 
-
-// ch020dcxsystempoolapict
-
 $('#login__form').submit(function( event ) {
   let loginData = {
     username: $(this).find('#login__username').val(),
@@ -54,6 +51,30 @@ $('#getobj__form').submit(function( event ) {
     setOutput(...[true, 'getobj',  response]);
   }).catch((response) => {
     setOutput(...[false, 'getobj',  response]);
+  });
+});
+
+$('#getobjects__form').submit(function( event ) {
+
+  let queryParam = {
+    'requestUrl': $(this).find('#getobjects__type').val(),
+    'id': $(this).find('#getobjects__id').val(),
+    'query': {
+      's': {
+        '_flags': '*'
+      },
+      'q': {
+        'channel': [$(this).find('#getobjects__id').val()],
+        '_limit': $(this).find('#getobjects__nr').val()
+      }
+    }
+  };
+
+  sdkClient.getObjects(queryParam)
+    .then((response) => {
+      setOutput(...[true, 'getobjects',  response]);
+    }).catch((response) => {
+    setOutput(...[false, 'getobjects',  response]);
   });
 });
 
@@ -153,7 +174,6 @@ $('#getstream__form').submit(function( event ) {
   };
 
   sdkClient.getStream(streamParam).then((response) => {
-
     let responseObj = { 'status':'-', 'message':'-', 'responseText': {}};
     response.stream.addEventListener('entry', function (event) {
       responseObj = {
@@ -182,32 +202,7 @@ $('#getstream__form').submit(function( event ) {
   }).catch((response) => {
     setOutput(...[false, 'getstream',  response]);
   });
-});
 
-
-$('#getobjects__form').submit(function( event ) {
-
-  let queryParam = {
-    'requestUrl': $(this).find('#getobjects__type').val(),
-    'id': $(this).find('#getobjects__id').val(),
-    'query': {
-      's': {
-        'properties': '*',
-        'fields': '*',
-      },
-      'q': {
-        'channel': [$(this).find('#getobjects__id').val()],
-        '_limit': $(this).find('#getobjects__nr').val()
-      }
-    }
-  };
-
-  sdkClient.getObjects(queryParam)
-    .then((response) => {
-    setOutput(...[true, 'getobjects',  response]);
-  }).catch((response) => {
-    setOutput(...[false, 'getobjects',  response]);
-  });
 });
 
 $('#actioninvoke__form').submit(function( event ) {
@@ -219,7 +214,7 @@ $('#actioninvoke__form').submit(function( event ) {
     'requestUrl': $(this).find('#actioninvoke__type').val(),
     'id': $(this).find('#actioninvoke__id').val(),
     'method': $(this).find('#actioninvoke__method').val(),
-    'payload': tmpQuery
+    'query': tmpQuery
   };
 
   sdkClient.invokeaction(queryParam)
@@ -243,7 +238,6 @@ let setOutput = function (status, selector, response) {
     outputTitle = '&#10003; ' + response.status + ' ' + response.message;
   }
 
-  // HTML Icons - 10007  - https://www.w3schools.com/charsets/ref_utf_dingbats.asp
   $(outputSelector + ' .status')
     .attr('class', 'status alert')
     .addClass(outputClass)
