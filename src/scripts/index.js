@@ -160,7 +160,7 @@ $('#getstream__form').submit(function( event ) {
         'status': 200,
         'message': 'streaming',
         'responseText': JSON.parse(event.data)
-      }
+      };
       setOutput(...[true, 'getstream', responseObj]);
       }, false);
 
@@ -182,25 +182,53 @@ $('#getstream__form').submit(function( event ) {
   }).catch((response) => {
     setOutput(...[false, 'getstream',  response]);
   });
-
-
-  // let streamWrapper = sdkClient.getStream(streamParam);
-
-  /*
-  streamWrapper.addEventListener('itemlist_item', (event) => {
-    debugger;
-    setOutput(...[true, 'getstream',  response]);
-  }, false); */
 });
 
-/*'query': {
-  'folderId': $(this).find('#getstream__id').val(),
-  'filter': 'false',
-  'page': '1',
-  'items': '40',
-  'query': '',
-  'sort': 'DateImported ASC',
-}*/
+
+$('#getobjects__form').submit(function( event ) {
+
+  let queryParam = {
+    'requestUrl': $(this).find('#getobjects__type').val(),
+    'id': $(this).find('#getobjects__id').val(),
+    'query': {
+      's': {
+        'properties': '*',
+        'fields': '*',
+      },
+      'q': {
+        'channel': [$(this).find('#getobjects__id').val()],
+        '_limit': $(this).find('#getobjects__nr').val()
+      }
+    }
+  };
+
+  sdkClient.getObjects(queryParam)
+    .then((response) => {
+    setOutput(...[true, 'getobjects',  response]);
+  }).catch((response) => {
+    setOutput(...[false, 'getobjects',  response]);
+  });
+});
+
+$('#actioninvoke__form').submit(function( event ) {
+
+  let tmpQuery = {};
+  tmpQuery[$(this).find('#actioninvoke__key').val()] = $(this).find('#actioninvoke__value').val();
+
+  let queryParam = {
+    'requestUrl': $(this).find('#actioninvoke__type').val(),
+    'id': $(this).find('#actioninvoke__id').val(),
+    'method': $(this).find('#actioninvoke__method').val(),
+    'payload': tmpQuery
+  };
+
+  sdkClient.invokeaction(queryParam)
+    .then((response) => {
+      setOutput(...[true, 'actioninvoke',  response]);
+    }).catch((response) => {
+    setOutput(...[false, 'actioninvoke',  response]);
+  });
+});
 
 
 let setOutput = function (status, selector, response) {
@@ -209,10 +237,10 @@ let setOutput = function (status, selector, response) {
 
   if(!status) {
     outputClass = 'alert-danger';
-    outputTitle = 'Failed due - ' + response.status + ' / ' + response.message;
+    outputTitle = '&#10005; ' + response.status + ' / ' + response.message;
   } else {
     outputClass = 'alert-success';
-    outputTitle = '&#10003; OK ' + response.status + ' ' + response.message;
+    outputTitle = '&#10003; ' + response.status + ' ' + response.message;
   }
 
   // HTML Icons - 10007  - https://www.w3schools.com/charsets/ref_utf_dingbats.asp

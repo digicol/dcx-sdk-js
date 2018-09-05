@@ -82,7 +82,7 @@
           <div id="getobject__card" class="collapse" aria-labelledby="getobject" data-parent="#client__interface">
             <div class="card-body">
               <!-- Get object -->
-              <div class="col-12 border mt-5">
+              <div class="col-12 mt-5">
                 <div class="row">
                   <div class="col-5 getobj__wrapper">
                     <div class="col-12 mt-4"><h3>Get Object</h3></div>
@@ -166,6 +166,92 @@
                 </div>
               </div>
               <!-- /Get object -->
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" id="getobjects">
+            <h5 class="mb-0">
+              <a class="btn btn-link collapsed mx-5" type="button" data-toggle="collapse" data-target="#getobjects__card" aria-expanded="false"
+                 aria-controls="getobjects__card">
+                Get Objects
+              </a>
+            </h5>
+          </div>
+          <div id="getobjects__card" class="collapse" aria-labelledby="getobjects" data-parent="#client__interface">
+            <div class="card-body">
+              <!-- get objects -->
+              <div class="col-12 mt-5">
+                <div class="row">
+                  <div class="col-5 getobjects__wrapper">
+                    <div class="col-12 mt-4"><h3>Get Objects (multiple as list)</h3></div>
+                    <div class="col-12 mt-3">/api/{objectType}/</div>
+                    <form id="getobjects__form" class="p-3 offset-1 form-group" action="#" type="POST">
+                      <div class="mt-3 col-12">
+                        <label for="getobjects__id">Document ID</label>
+                        <input type="text" name="getobjectsid" value="ch020dcxsystempoolapict" class="form-control" id="getobjects__id"/>
+                      </div>
+                      <div class="mt-3 col-12">
+                        <label for="getobjects__type">Object type</label>
+                        <select name="url" class="form-control" id="getobjects__type">
+                          <option value="channel">channel</option>
+                          <option value="comment">comment</option>
+                          <option value="configdef">configdef</option>
+                          <option value="configsetting">configsetting</option>
+                          <option value="device">device</option>
+                          <option value="doclink">doclink</option>
+                          <option value="doctorprof">doctorprof</option>
+                          <option value="doctoutag">doctoutag</option>
+                          <option value="document" selected>document</option>
+                          <option value="documentation">documentation</option>
+                          <option value="file">file</option>
+                          <option value="flag">flag</option>
+                          <option value="flagfunction">flagfunction</option>
+                          <option value="formcomponentconfig">formcomponentconfig</option>
+                          <option value="job">job</option>
+                          <option value="menuitem">menuitem</option>
+                          <option value="permdef">permdef</option>
+                          <option value="permission">permission</option>
+                          <option value="pool">pool</option>
+                          <option value="pubinfo">pubinfo</option>
+                          <option value="rights">rights</option>
+                          <option value="rightsprofile">rightsprofile</option>
+                          <option value="role">role</option>
+                          <option value="schedule">schedule</option>
+                          <option value="script">script</option>
+                          <option value="share">share</option>
+                          <option value="story">story</option>
+                          <option value="tagdef">tagdef</option>
+                          <option value="taggroupconfig">taggroupconfig</option>
+                          <option value="textindex">textindex</option>
+                          <option value="tm_association">tm_association</option>
+                          <option value="tm_occurrence">tm_occurrence</option>
+                          <option value="tm_topic">tm_topic</option>
+                          <option value="translation">translation</option>
+                          <option value="usersetting">usersetting</option>
+                          <option value="usertag">usertag</option>
+                          <option value="webactiondef">webactiondef</option>
+                          <option value="workflow">workflow</option>
+                          <option value="workflowstep">workflowstep</option>
+                        </select>
+                      </div>
+                      <div class="mt-3 col-12">
+                        <label for="getobjects__nr">Limit</label>
+                        <input type="number" name="getobjectsnr" value="50" class="form-control" id="getobjects__nr"/>
+                      </div>
+                      <div class="mt-5 col-6 offset-5 form-group">
+                        <input type="submit" value="Get Objects" class="form-control btn btn-primary"/>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-6 offset-1 getobjects__output__wrapper pt-5">
+                    <div class="status alert" role="alert"></div>
+                    <div class="d-inline-block output alert alert-primary">...</div>
+                  </div>
+                </div>
+              </div>
+              <!-- /get objects -->
             </div>
           </div>
         </div>
@@ -447,7 +533,7 @@
                         <input type="text" name="streamid" value="ch020dcxsystempoolapict" class="form-control" id="getstream__id"/>
                       </div>
                       <div class="mt-3 col-12">
-                        <label for="deleteobj__field">Object type</label>
+                        <label for="getstream__type">Object type</label>
                         <select name="url" class="form-control" id="getstream__type">
                           <option value="channel">channel</option>
                           <option value="comment">comment</option>
@@ -507,6 +593,106 @@
                 </div>
               </div>
               <!-- /getStream object -->
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header" id="actioninvoke">
+            <a class="btn btn-link collapsed mx-5" type="button" data-toggle="collapse" data-target="#actioninvoke__card" aria-expanded="false"
+               aria-controls="actioninvoke__card">
+              Action Invoke
+            </a>
+          </div>
+          <div id="actioninvoke__card" class="collapse" aria-labelledby="actioninvoke" data-parent="#client__interface">
+            <div class="card-body">
+              <!-- actionInvoke object -->
+              <div class="col-12 mt-5">
+                <div class="row">
+                  <div class="col-5 actioninvoke__wrapper">
+                    <div class="col-12 mt-4"><h3>Action Invoke</h3></div>
+                    <div class="col-12 mt-3">/api/{objectType}/actions/{actionName}/invoke</div>
+                    <form id="actioninvoke__form" class="p-3 offset-1 form-group" action="#" type="POST">
+                      <div class="mt-3 col-12">
+                        <label for="actioninvoke__id">Document ID</label>
+                        <input type="text" name="actioninvokeid" value="monroex5xdx7s0q9gok9b9ap2x" class="form-control" id="actioninvoke__id"/>
+                      </div>
+                      <div class="mt-3 col-12">
+                        <label for="actioninvoke__type">Object type</label>
+                        <select name="url" class="form-control" id="actioninvoke__type">
+                          <option value="channel">channel</option>
+                          <option value="comment">comment</option>
+                          <option value="configdef">configdef</option>
+                          <option value="configsetting">configsetting</option>
+                          <option value="device">device</option>
+                          <option value="doclink">doclink</option>
+                          <option value="doctorprof">doctorprof</option>
+                          <option value="doctoutag">doctoutag</option>
+                          <option value="document" selected>document</option>
+                          <option value="documentation">documentation</option>
+                          <option value="file">file</option>
+                          <option value="flag">flag</option>
+                          <option value="flagfunction">flagfunction</option>
+                          <option value="formcomponentconfig">formcomponentconfig</option>
+                          <option value="job">job</option>
+                          <option value="menuitem">menuitem</option>
+                          <option value="permdef">permdef</option>
+                          <option value="permission">permission</option>
+                          <option value="pool">pool</option>
+                          <option value="pubinfo">pubinfo</option>
+                          <option value="rights">rights</option>
+                          <option value="rightsprofile">rightsprofile</option>
+                          <option value="role">role</option>
+                          <option value="schedule">schedule</option>
+                          <option value="script">script</option>
+                          <option value="share">share</option>
+                          <option value="story">story</option>
+                          <option value="tagdef">tagdef</option>
+                          <option value="taggroupconfig">taggroupconfig</option>
+                          <option value="textindex">textindex</option>
+                          <option value="tm_association">tm_association</option>
+                          <option value="tm_occurrence">tm_occurrence</option>
+                          <option value="tm_topic">tm_topic</option>
+                          <option value="translation">translation</option>
+                          <option value="usersetting">usersetting</option>
+                          <option value="usertag">usertag</option>
+                          <option value="webactiondef">webactiondef</option>
+                          <option value="workflow">workflow</option>
+                          <option value="workflowstep">workflowstep</option>
+                        </select>
+                      </div>
+
+                      <div class="mt-3 col-12">
+                        <label for="actioninvoke__method">Method</label>
+                        <input type="text" name="actioninvokemethod" value="setcolor" class="form-control" id="actioninvoke__method"/>
+                        <small><small>addcomment, moveintotrash, restoreromtrash, setcolor, setcolorincollection</small></small>
+                      </div>
+
+                      <div class="row no-gutters border p-3 mt-3">
+                        <div class="mt-3 col-6">
+                          <label for="actioninvoke__key">Key</label>
+                          <input type="text" name="actioninvokekey" value="color" class="form-control" id="actioninvoke__key"/>
+                          <small><small>comment, color, collection</small></small>
+                        </div>
+                        <div class="mt-3 pl-3 col-6">
+                          <label for="actioninvoke__value">Value</label>
+                          <input type="text" name="actioninvokevalue" value="color-FB8E00" class="form-control" id="actioninvoke__value"/>
+                          <small><small>* certain acctions require multiple parameters</small></small>
+                          <small><small>color-06FFFB, color-4FE04F, color-874DAD, color-9C543C, color-DB2E1F, color-FB00A3, color-FB8E00 </small></small>
+                        </div>
+                      </div>
+                      <div class="mt-5 col-6 offset-5 form-group">
+                        <input type="submit" value="Trigger Action" class="form-control btn btn-primary"/>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-6 offset-1 actioninvoke__output__wrapper pt-5">
+                    <div class="status alert" role="alert"></div>
+                    <div class="d-inline-block output alert alert-primary">...</div>
+                  </div>
+                </div>
+              </div>
+              <!-- /actionInvoke object -->
             </div>
           </div>
         </div>
