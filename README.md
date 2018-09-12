@@ -2,8 +2,12 @@
 
 
 ## Start the project:
-- npm run dev
+``` bash
+npm run dev
+```
 
-## run build:
-- npm run build
+## Run build:
+``` bash
+npm run build
+```
 
