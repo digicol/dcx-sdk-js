@@ -1,0 +1,17 @@
+{
+  "name": "digicol/dcx-sdk-js",
+  "type": "library",
+  "description": "Client library to access Digital Collections (DCX) assets.",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "proprietary",
+  "homepage": "http://www.digicol.de/",
+  "authors":
+  [
+    {
+      "name": "Digital Collections Verlagsgesellschaft mbH",
+      "email": "dev@digicol.com",
+      "role" : "Developer"
+    }
+  ]
+}
