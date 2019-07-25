@@ -185,18 +185,20 @@ $('#getstream__form').submit(function( event ) {
         'responseText': JSON.parse(event.data)
       };
       setOutput(...[true, 'getstream', responseObj]);
+      debugger;
       }, false);
 
     response.stream.addEventListener('error', function (event) {
+      debugger;
       this.close();
       }, false);
 
     response.stream.addEventListener('open', (event) => {
-      // debugger;
+      debugger;
       }, false);
 
     response.stream.addEventListener('close', (event) => {
-      // debugger;
+      debugger;
     }, false);
 
     $('#stream__cancel').click(function() {
