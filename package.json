@@ -1,0 +1,29 @@
+{
+  "name": "dcx-sdk-js",
+  "version": "1.0.0",
+  "description": "Basic JS SDK to work with DC-X.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digicol/dcx-sdk-js.git"
+  },
+  "keywords": [
+    "webpack",
+    "startkit",
+    "frontend",
+    "es6",
+    "javascript",
+    "webdev",
+    "dcx"
+  ],
+  "private": true,
+  "author": "Digital Collection",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/digicol/dcx-sdk-js/issues"
+  },
+  "homepage": "https://github.com/digicol/dcx-sdk-js#readme",
+  "main": "dcx-sdk-js.js"
+}
