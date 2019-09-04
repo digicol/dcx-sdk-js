@@ -5,8 +5,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const dest = Path.join(__dirname, '../dist');
+// const dest = Path.join(__dirname, './dist');
+const dest = Path.join(__dirname, '/dist');
 
 module.exports = {
   entry: [
@@ -16,7 +16,8 @@ module.exports = {
     Path.resolve(__dirname, '../src/scripts/index')
   ],
   output: {
-    path: dest,
+    // path: dest,
+    path: process.cwd() + '/dist',
     filename: 'bundle.[hash].js'
   },
   plugins: [
