@@ -4,7 +4,6 @@ module.exports.baseUrl = '';
 module.exports.apiUrl = 'api/';
 module.exports.bearerToken = false;
 
-
 module.exports.login = function(actionData) {
   let dataObj = {
     'grant_type': 'password',
@@ -31,8 +30,8 @@ module.exports.login = function(actionData) {
 
 };
 
-module.exports.setApiUrl = function(newBaseUrl) {
-  exports.baseUrl = newBaseUrl
+module.exports.setApiUrl = function(newApiUrl) {
+  exports.apiUrl = newApiUrl
 };
 
 module.exports.setBaseUrl = function(newBaseUrl) {
@@ -50,7 +49,19 @@ module.exports.getObject = function(actionData) {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
     'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + exports.apiUrl + actionData.requestUrl + '/' +  actionData.id + '?' + exports.parseObjUrl(actionData.query),
+    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '/' +  actionData.id + '?' + exports.parseObjUrl(actionData.query),
+    'dataObjEncoded': ''
+  };
+  return exports.reqPromise(requestObj);
+};
+
+module.exports.followLink = function(linkurl) {
+  if(!exports.bearerToken) { return exports.loginFail(); }
+  let requestObj = {
+    'method': 'GET',
+    'dataType': 'application/x-www-form-urlencoded',
+    'bearer': exports.bearerToken,
+    'absRequestUrl': exports.baseUrl + exports.apiUrl + linkurl,
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);
@@ -68,7 +79,6 @@ module.exports.getObjects = function(actionData) {
   };
   return exports.reqPromise(requestObj);
 };
-
 
 module.exports.createObject = function(actionData) {
   if(!exports.bearerToken) { return exports.loginFail(); }
@@ -186,7 +196,6 @@ module.exports.getStream = function(actionData) {
       });
     });
   }
-
 };
 
 module.exports.invokeaction = function(actionData) {
