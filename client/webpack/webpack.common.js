@@ -5,18 +5,17 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const dest = Path.join(__dirname, '../dist');
+const dest = Path.join(__dirname, '/dist');
 
 module.exports = {
   entry: [
     Path.resolve(__dirname, './polyfills'),
-    // Path.resolve(__dirname, '../src/scripts/index')
-    Path.resolve(__dirname, '../../lib/index'),
+    Path.resolve(__dirname, '../../dcx-sdk-js.js'),
     Path.resolve(__dirname, '../src/scripts/index')
   ],
   output: {
-    path: dest,
+    // path: dest,
+    path: process.cwd() + '/dist',
     filename: 'bundle.[hash].js'
   },
   plugins: [

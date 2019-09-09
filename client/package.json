@@ -1,7 +1,7 @@
 {
-  "name": "dcx-sdk-js",
+  "name": "dcx-sdk-js-client",
   "version": "1.0.0",
-  "description": "Basic SDK to work with DC-X.",
+  "description": "Basic SDK Client to work with DC-X.",
   "scripts": {
     "build": "webpack --config webpack/webpack.config.prod.js  --colors",
     "dev": "webpack-dev-server --open --config webpack/webpack.config.dev.js"

@@ -4,15 +4,14 @@ module.exports.baseUrl = '';
 module.exports.apiUrl = 'api/';
 module.exports.bearerToken = false;
 
-
 module.exports.login = function(actionData) {
-  let dataObj = {
+  var dataObj = {
     'grant_type': 'password',
     'username': actionData.username,
     'password': actionData.password
   };
 
-  let requestObj = {
+  var requestObj = {
     'method': 'POST',
     'dataType': 'application/x-www-form-urlencoded',
     'absRequestUrl': actionData.hostUrl + 'oauth/token',
@@ -23,7 +22,7 @@ module.exports.login = function(actionData) {
   return exports.reqPromise(requestObj)
     .then((response) => {
       exports.bearerToken = response.responseText.access_token;
-      exports.baseUrl = actionData.hostUrl + exports.apiUrl;
+      exports.baseUrl = actionData.hostUrl;
       return [true, 'login',  response];
     }).catch((response) => {
       return [false, 'login',  response];
@@ -31,8 +30,8 @@ module.exports.login = function(actionData) {
 
 };
 
-module.exports.setApiUrl = function(newBaseUrl) {
-  exports.baseUrl = newBaseUrl
+module.exports.setApiUrl = function(newApiUrl) {
+  exports.apiUrl = newApiUrl
 };
 
 module.exports.setBaseUrl = function(newBaseUrl) {
@@ -56,6 +55,18 @@ module.exports.getObject = function(actionData) {
   return exports.reqPromise(requestObj);
 };
 
+module.exports.followLink = function(linkurl) {
+  if(!exports.bearerToken) { return exports.loginFail(); }
+  let requestObj = {
+    'method': 'GET',
+    'dataType': 'application/x-www-form-urlencoded',
+    'bearer': exports.bearerToken,
+    'absRequestUrl': exports.baseUrl + exports.apiUrl + linkurl,
+    'dataObjEncoded': ''
+  };
+  return exports.reqPromise(requestObj);
+};
+
 module.exports.getObjects = function(actionData) {
   if(!exports.bearerToken) { return exports.loginFail(); }
 
@@ -63,12 +74,11 @@ module.exports.getObjects = function(actionData) {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
     'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '/' + '?' + exports.parseObjUrl(actionData.query),
+    'absRequestUrl': exports.baseUrl + exports.apiUrl + actionData.requestUrl + '/' + '?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);
 };
-
 
 module.exports.createObject = function(actionData) {
   if(!exports.bearerToken) { return exports.loginFail(); }
@@ -77,7 +87,7 @@ module.exports.createObject = function(actionData) {
     'method': 'POST',
     'dataType': 'Content-Type: application/json; charset=UTF-8',
     'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query),
+    'absRequestUrl': exports.baseUrl  + exports.apiUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': JSON.stringify(actionData.payload)
   };
   return exports.reqPromise(requestObj);
@@ -91,7 +101,7 @@ module.exports.setObject = function(actionData) {
       'method': 'PUT',
       'dataType': 'application/json; charset=UTF-8',
       'bearer': exports.bearerToken,
-      'absRequestUrl': exports.baseUrl + actionData.requestUrl + actionData.id + '?' + exports.parseObjUrl(actionData.query),
+      'absRequestUrl': exports.baseUrl + exports.apiUrl + actionData.requestUrl + actionData.id + '?' + exports.parseObjUrl(actionData.query),
       'dataObjEncoded': JSON.stringify(object)
     };
     return exports.reqPromise(setRequestObj);
@@ -129,7 +139,7 @@ module.exports.deleteObject = function(actionData) {
     'method': 'DELETE',
     'dataType': 'application/x-www-form-urlencoded',
     'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '/' + actionData.id,
+    'absRequestUrl': exports.baseUrl + exports.apiUrl + actionData.requestUrl + '/' + actionData.id,
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);
@@ -168,7 +178,7 @@ module.exports.getStream = function(actionData) {
   if(!exports.bearerToken) { return exports.loginFail(); }
 
   if (!!window.EventSource) {
-    let queryUrl = exports.baseUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query);
+    let queryUrl = exports.baseUrl  + exports.apiUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query);
     let evHeader = {
       headers: {
         Authorization: "Bearer " + exports.bearerToken,
@@ -186,7 +196,6 @@ module.exports.getStream = function(actionData) {
       });
     });
   }
-
 };
 
 module.exports.invokeaction = function(actionData) {
@@ -196,7 +205,7 @@ module.exports.invokeaction = function(actionData) {
     'method': 'POST',
     'dataType': 'application/json; charset=UTF-8',
     'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + actionData.requestUrl + '/' + actionData.id + '/actions/' + actionData.method +'/invoke?' + exports.parseObjUrl(actionData.query),
+    'absRequestUrl': exports.baseUrl  + exports.apiUrl + actionData.requestUrl + '/' + actionData.id + '/actions/' + actionData.method +'/invoke?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);

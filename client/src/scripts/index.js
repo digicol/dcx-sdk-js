@@ -1,6 +1,6 @@
 import '../styles/index.scss';
 
-let sdkClient = require('../../../lib');
+let sdkClient = require('../../../dcx-sdk-js.js');
 
 $('#login__form').submit(function( event ) {
   event.preventDefault();
