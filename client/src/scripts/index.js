@@ -58,7 +58,6 @@ $('#getobj__form').submit(function( event ) {
 });
 
 $('#getobjects__form').submit(function( event ) {
-
   let queryParam = {
     'requestUrl': $(this).find('#getobjects__type').val(),
     'id': $(this).find('#getobjects__id').val(),
@@ -80,6 +79,20 @@ $('#getobjects__form').submit(function( event ) {
     setOutput(...[false, 'getobjects',  response]);
   });
 });
+
+
+
+$('#followlink__form').submit(function( event ) {
+  event.preventDefault();
+  let loginPromise = sdkClient.followLink($(this).find('#followlink__url').val());
+  loginPromise.then((responseObj) => {
+    setOutput(...[true, 'followlink', responseObj]);
+    setOutput(...response);
+  }).catch((response) => {
+    setOutput(...[false, 'followlink', responseObj]);
+  });
+});
+
 
 $('#createobj__form').submit(function( event ) {
   let createPayload, createQuery = {};
@@ -185,20 +198,16 @@ $('#getstream__form').submit(function( event ) {
         'responseText': JSON.parse(event.data)
       };
       setOutput(...[true, 'getstream', responseObj]);
-      debugger;
       }, false);
 
     response.stream.addEventListener('error', function (event) {
-      debugger;
       this.close();
       }, false);
 
     response.stream.addEventListener('open', (event) => {
-      debugger;
       }, false);
 
     response.stream.addEventListener('close', (event) => {
-      debugger;
     }, false);
 
     $('#stream__cancel').click(function() {
