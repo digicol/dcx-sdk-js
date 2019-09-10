@@ -61,7 +61,7 @@ module.exports.followLink = function(linkurl) {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
     'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + exports.apiUrl + linkurl,
+    'absRequestUrl': linkurl,
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);
@@ -113,7 +113,6 @@ module.exports.setObject = function(actionData) {
       return setObjectCallback(response.responseText);
     } else {
       return new Promise((resolve, reject) => {
-        debugger;
         reject({
           'status': '201',
           'message': 'No changes or Field not found.'
@@ -122,7 +121,6 @@ module.exports.setObject = function(actionData) {
     }
   }).catch((response) => {
       return new Promise((resolve, reject) => {
-        debugger;
         reject({
           'status': response.status,
           'message': response.message
@@ -270,7 +268,6 @@ module.exports.reqPromise = function (requestData) {
     try {
       xhr.send(requestData.dataObjEncoded);
     } catch(err) {
-      debugger;
     }
   });
 };
