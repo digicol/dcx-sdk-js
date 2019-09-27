@@ -3,6 +3,12 @@
 module.exports.baseUrl = '';
 module.exports.apiUrl = 'api/';
 module.exports.bearerToken = false;
+module.exports.username = '';
+module.exports.password = '';
+module.exports.bearerTokenExpiration = 0;
+
+module.exports.useLocalStorage = false;
+module.exports.useReauthentication = false;
 
 module.exports.login = function(actionData) {
   var dataObj = {
@@ -21,8 +27,14 @@ module.exports.login = function(actionData) {
 
   return exports.reqPromise(requestObj)
     .then((response) => {
-      exports.bearerToken = response.responseText.access_token;
-      exports.baseUrl = actionData.hostUrl;
+      exports.setBearerToken(response.responseText.access_token);
+      exports.setBaseUrl(actionData.hostUrl);
+      if (exports.useReauthentication) {
+        exports.setUsername(actionData.username);
+        exports.setPassword(actionData.password);
+        var expireMiliseconds = response.responseText.expires_in * 1000;
+        exports.setBearerTokenExpiration(expireMiliseconds + Date.now());
+      }
       return [true, 'login',  response];
     }).catch((response) => {
       return [false, 'login',  response];
@@ -30,81 +42,132 @@ module.exports.login = function(actionData) {
 
 };
 
+module.exports.setUseLocalStorage = function(useLocalStorage) {
+  exports.useLocalStorage = useLocalStorage;
+};
+
+module.exports.setUseReauthentication = function(useReauthentication) {
+  exports.useReauthentication = useReauthentication;
+};
+
 module.exports.setApiUrl = function(newApiUrl) {
-  exports.apiUrl = newApiUrl
+  exports.apiUrl = newApiUrl;
 };
 
 module.exports.setBaseUrl = function(newBaseUrl) {
-  exports.baseUrl = newBaseUrl
+  exports.baseUrl = newBaseUrl;
+  if (exports.useLocalStorage)
+    window.localStorage.setItem('dc.baseUrl', newBaseUrl);
+};
+
+module.exports.getBaseUrl = function() {
+  if (exports.useLocalStorage)
+    exports.baseUrl = window.localStorage.getItem('dc.baseUrl');
+  return exports.baseUrl;
 };
 
 module.exports.setBearerToken = function(newBearerToken) {
-  exports.bearerToken = newBearerToken
+  exports.bearerToken = newBearerToken;
+  if (exports.useLocalStorage)
+    window.localStorage.setItem('dc.bearerToken', newBearerToken);
+};
+
+module.exports.getBearerToken = function() {
+  if (exports.useLocalStorage)
+    exports.bearerToken = window.localStorage.getItem('dc.bearerToken');
+  return exports.bearerToken;
+};
+
+module.exports.setUsername = function(newUsername) {
+  exports.username = newUsername;
+  if (exports.useLocalStorage)
+    window.localStorage.setItem('dc.username', newUsername);
+};
+
+module.exports.getUsername = function() {
+  if (exports.useLocalStorage)
+    exports.username = window.localStorage.getItem('dc.username');
+  return exports.username;
+};
+
+module.exports.setPassword = function(newPassword) {
+  exports.password = newPassword;
+  if (exports.useLocalStorage)
+    window.localStorage.setItem('dc.password', newPassword);
+};
+
+module.exports.getPassword = function() {
+  if (exports.useLocalStorage)
+    exports.password = window.localStorage.getItem('dc.password');
+  return exports.password;
+};
+
+module.exports.setBearerTokenExpiration = function(newExpiration) {
+  exports.bearerTokenExpiration = newExpiration;
+  if (exports.useLocalStorage)
+    window.localStorage.setItem('dc.expiration', newExpiration);
+};
+
+module.exports.getBearerTokenExpiration = function() {
+  if (exports.useLocalStorage)
+    exports.bearerTokenExpiration = Number(window.localStorage.getItem('dc.expiration'));
+  return exports.bearerTokenExpiration;
 };
 
 module.exports.getObject = function(actionData) {
-  if(!exports.bearerToken) { return exports.loginFail(); }
-
   let requestObj = {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
-    'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + exports.apiUrl + actionData.requestUrl + '/' +  actionData.id + '?' + exports.parseObjUrl(actionData.query),
+    'bearer': exports.getBearerToken(),
+    'absRequestUrl': exports.getBaseUrl() + exports.apiUrl + actionData.requestUrl + '/' +  actionData.id + '?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': ''
   };
-  return exports.reqPromise(requestObj);
+  return exports.checkAuthAndSendRequest(requestObj);
 };
 
 module.exports.followLink = function(linkurl) {
-  if(!exports.bearerToken) { return exports.loginFail(); }
   let requestObj = {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
-    'bearer': exports.bearerToken,
+    'bearer': exports.getBearerToken(),
     'absRequestUrl': linkurl,
     'dataObjEncoded': ''
   };
-  return exports.reqPromise(requestObj);
+  return exports.checkAuthAndSendRequest(requestObj);
 };
 
 module.exports.getObjects = function(actionData) {
-  if(!exports.bearerToken) { return exports.loginFail(); }
-
   let requestObj = {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
-    'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + exports.apiUrl + actionData.requestUrl + '/' + '?' + exports.parseObjUrl(actionData.query),
+    'bearer': exports.getBearerToken(),
+    'absRequestUrl': exports.getBaseUrl() + exports.apiUrl + actionData.requestUrl + '/' + '?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': ''
   };
-  return exports.reqPromise(requestObj);
+  return exports.checkAuthAndSendRequest(requestObj);
 };
 
 module.exports.createObject = function(actionData) {
-  if(!exports.bearerToken) { return exports.loginFail(); }
-
   let requestObj = {
     'method': 'POST',
     'dataType': 'Content-Type: application/json; charset=UTF-8',
-    'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl  + exports.apiUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query),
+    'bearer': exports.getBearerToken(),
+    'absRequestUrl': exports.getBaseUrl()  + exports.apiUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': JSON.stringify(actionData.payload)
   };
-  return exports.reqPromise(requestObj);
+  return exports.checkAuthAndSendRequest(requestObj);
 };
 
 module.exports.setObject = function(actionData) {
-  if(!exports.bearerToken) { return exports.loginFail(); }
-
   let setObjectCallback = function (object) {
     let setRequestObj = {
       'method': 'PUT',
       'dataType': 'application/json; charset=UTF-8',
-      'bearer': exports.bearerToken,
-      'absRequestUrl': exports.baseUrl + exports.apiUrl + actionData.requestUrl + actionData.id + '?' + exports.parseObjUrl(actionData.query),
+      'bearer': exports.getBearerToken(),
+      'absRequestUrl': exports.getBaseUrl() + exports.apiUrl + actionData.requestUrl + actionData.id + '?' + exports.parseObjUrl(actionData.query),
       'dataObjEncoded': JSON.stringify(object)
     };
-    return exports.reqPromise(setRequestObj);
+    return exports.checkAuthAndSendRequest(requestObj);
   };
 
   return exports.getObject(actionData).then((response) => {
@@ -131,16 +194,14 @@ module.exports.setObject = function(actionData) {
 };
 
 module.exports.deleteObject = function(actionData) {
-  if(!exports.bearerToken) { return exports.loginFail(); }
-
   let requestObj = {
     'method': 'DELETE',
     'dataType': 'application/x-www-form-urlencoded',
-    'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + exports.apiUrl + actionData.requestUrl + '/' + actionData.id,
+    'bearer': exports.getBearerToken(),
+    'absRequestUrl': exports.getBaseUrl() + exports.apiUrl + actionData.requestUrl + '/' + actionData.id,
     'dataObjEncoded': ''
   };
-  return exports.reqPromise(requestObj);
+  return exports.checkAuthAndSendRequest(requestObj);
 };
 
 module.exports.parseStructure = function(obj, structurePath, strict = false) {
@@ -173,40 +234,63 @@ module.exports.parseStructure = function(obj, structurePath, strict = false) {
 };
 
 module.exports.getStream = function(actionData) {
-  if(!exports.bearerToken) { return exports.loginFail(); }
-
-  if (!!window.EventSource) {
-    let queryUrl = exports.baseUrl  + exports.apiUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query);
-    let evHeader = {
-      headers: {
-        Authorization: "Bearer " + exports.bearerToken,
-        'Accept': 'text/event-stream',
-        'Cookie': 'test=test'
-      },
-      withCredentials: true
-    };
-    return new Promise((resolve, reject) => {
-      resolve({
-        'status': 201,
-        'message': 'Streaming...',
-        'responseText': 'Follow streaming events like: itemlist_item, open, error, close',
-        'stream': new EventSource(queryUrl, evHeader)
+  let stream = function(bearerToken, actionData) {
+    if (!!window.EventSource) {
+      let queryUrl = exports.getBaseUrl()  + exports.apiUrl + actionData.requestUrl + '?' + exports.parseObjUrl(actionData.query);
+      let evHeader = {
+        headers: {
+          Authorization: "Bearer " + bearerToken,
+          'Accept': 'text/event-stream',
+          'Cookie': 'test=test'
+        },
+        withCredentials: true
+      };
+      return new Promise((resolve, reject) => {
+        resolve({
+          'status': 201,
+          'message': 'Streaming...',
+          'responseText': 'Follow streaming events like: itemlist_item, open, error, close',
+          'stream': new EventSource(queryUrl, evHeader)
+        });
       });
-    });
+    }
+  }
+
+  var bearerToken = exports.getBearerToken();
+  if(!bearerToken) { 
+    return exports.loginFail(); 
+  }
+  else if (exports.useReauthentication && exports.isExpired()) { 
+    return exports.reAuthenticate().then(token => stream(token, actionData));
+  }
+  else { 
+    return stream(bearerToken, actionData); 
   }
 };
 
 module.exports.invokeaction = function(actionData) {
-  if(!exports.bearerToken) { return exports.loginFail(); }
-
   let requestObj = {
     'method': 'POST',
     'dataType': 'application/json; charset=UTF-8',
-    'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl  + exports.apiUrl + actionData.requestUrl + '/' + actionData.id + '/actions/' + actionData.method +'/invoke?' + exports.parseObjUrl(actionData.query),
+    'bearer': exports.getBearerToken(),
+    'absRequestUrl': exports.getBaseUrl()  + exports.apiUrl + actionData.requestUrl + '/' + actionData.id + '/actions/' + actionData.method +'/invoke?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': ''
   };
-  return exports.reqPromise(requestObj);
+  return exports.checkAuthAndSendRequest(requestObj);
+};
+
+module.exports.checkAuthAndSendRequest = function(requestObj) {
+  if(!requestObj.bearer) { 
+    return exports.loginFail(); 
+  }
+  else if (exports.useReauthentication && exports.isExpired()) { 
+    return exports.reAuthenticate()
+      .then(token => requestObj.bearer = token)
+      .then(() => exports.reqPromise(requestObj));
+  }
+  else { 
+    return exports.reqPromise(requestObj) 
+  }
 };
 
 module.exports.reqPromise = function (requestData) {
@@ -303,3 +387,24 @@ module.exports.loginFail = function(objData) {
     });
   });
 };
+
+module.exports.isExpired = function() {
+  return exports.getBearerTokenExpiration() < Date.now();
+}
+
+module.exports.reAuthenticate = function() {
+  return exports.login({
+      'hostUrl': exports.getBaseUrl(),
+      'password': exports.getPassword(),
+      'username': exports.getUsername()
+    }).then(res => {
+      return res[2].responseText.access_token
+    });
+}
+
+module.exports.logout = function() {
+  exports.setBearerToken('');
+  exports.setUsername('');
+  exports.setPassword('');
+  exports.setBearerTokenExpiration(0);
+}
