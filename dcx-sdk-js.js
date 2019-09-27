@@ -404,3 +404,10 @@ module.exports.reAuthenticate = function() {
       return res[2].responseText.access_token
     });
 }
+
+module.exports.logout = function() {
+  exports.setBearerToken('');
+  exports.setUsername('');
+  exports.setPassword('');
+  exports.setBearerTokenExpiration(0);
+}
