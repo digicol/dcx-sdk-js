@@ -115,13 +115,10 @@ module.exports.getBearerTokenExpiration = function() {
 };
 
 module.exports.getObject = function(actionData) {
-  var bearerToken = exports.getBearerToken();
-  if(!bearerToken) { return exports.loginFail(); }
-
   let requestObj = {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
-    'bearer': bearerToken,
+    'bearer': exports.getBearerToken(),
     'absRequestUrl': exports.getBaseUrl() + exports.apiUrl + actionData.requestUrl + '/' +  actionData.id + '?' + exports.parseObjUrl(actionData.query),
     'dataObjEncoded': ''
   };
