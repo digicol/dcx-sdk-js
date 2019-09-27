@@ -283,7 +283,7 @@ module.exports.invokeaction = function(actionData) {
 };
 
 module.exports.checkAuthAndSendRequest = function(requestObj) {
-  if(!requestObj.bearerToken) { 
+  if(!requestObj.bearer) { 
     return exports.loginFail(); 
   }
   else if (exports.useReauthentication && exports.isExpired()) { 
