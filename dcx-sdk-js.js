@@ -200,11 +200,11 @@ module.exports.invokeaction = function(actionData) {
   if(!exports.bearerToken) { return exports.loginFail(); }
 
   let requestObj = {
-    'method': 'POST',
+    'method': (actionData.httpMethod != undefined) ? actionData.httpMethod : 'POST',
     'dataType': 'application/json; charset=UTF-8',
     'bearer': exports.bearerToken,
     'absRequestUrl': exports.baseUrl  + exports.apiUrl + actionData.requestUrl + '/' + actionData.id + '/actions/' + actionData.method +'/invoke?' + exports.parseObjUrl(actionData.query),
-    'dataObjEncoded': ''
+    'dataObjEncoded': (actionData.data != undefined) ? JSON.stringify(actionData.data) : ''
   };
   return exports.reqPromise(requestObj);
 };
