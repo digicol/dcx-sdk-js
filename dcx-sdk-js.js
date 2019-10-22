@@ -55,13 +55,18 @@ module.exports.getObject = function(actionData) {
   return exports.reqPromise(requestObj);
 };
 
-module.exports.followLink = function(linkurl) {
+module.exports.followLink = function(linkurl, includebase = true) {
   if(!exports.bearerToken) { return exports.loginFail(); }
+  let url = linkurl
+  if (!includebase)
+  {
+    url =  exports.baseUrl + exports.apiUrl + linkurl
+  }
   let requestObj = {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
     'bearer': exports.bearerToken,
-    'absRequestUrl': linkurl,
+    'absRequestUrl': url,
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);

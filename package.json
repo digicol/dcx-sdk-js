@@ -1,6 +1,6 @@
 {
   "name": "dcx-sdk-js",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "Basic JS SDK to work with DC-X.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,7 +18,7 @@
     "webdev",
     "dcx"
   ],
-  "private": true,
+  "private": false,
   "author": "Digital Collection",
   "license": "MIT",
   "bugs": {
