@@ -4,6 +4,9 @@ module.exports.baseUrl = '';
 module.exports.apiUrl = 'api/';
 module.exports.bearerToken = false;
 
+// remove Cookie since DCX prioritize cookie data before bearer
+Document.cookie = '';
+
 module.exports.login = function(actionData) {
   var dataObj = {
     'grant_type': 'password',
@@ -18,9 +21,7 @@ module.exports.login = function(actionData) {
     'dataObjEncoded': exports.parseObjUrl(dataObj),
     'bearer': false
   };
-  
-  // remove Cookie since DCX prioritize cookie data before bearer
-  Document.cookie = '';
+
 
   return exports.reqPromise(requestObj)
     .then((response) => {
