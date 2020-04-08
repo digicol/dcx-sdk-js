@@ -18,6 +18,9 @@ module.exports.login = function(actionData) {
     'dataObjEncoded': exports.parseObjUrl(dataObj),
     'bearer': false
   };
+  
+  // remove Cookie since DCX prioritize cookie data before bearer
+  Document.cookie = '';
 
   return exports.reqPromise(requestObj)
     .then((response) => {
