@@ -58,7 +58,6 @@ $('#getobj__form').submit(function( event ) {
 });
 
 $('#getobjects__form').submit(function( event ) {
-
   let queryParam = {
     'requestUrl': $(this).find('#getobjects__type').val(),
     'id': $(this).find('#getobjects__id').val(),
@@ -81,26 +80,58 @@ $('#getobjects__form').submit(function( event ) {
   });
 });
 
+
+
+$('#followlink__form').submit(function( event ) {
+  event.preventDefault();
+  let loginPromise = sdkClient.followLink($(this).find('#followlink__url').val());
+  loginPromise.then((responseObj) => {
+    setOutput(...[true, 'followlink', responseObj]);
+    setOutput(...response);
+  }).catch((response) => {
+    setOutput(...[false, 'followlink', responseObj]);
+  });
+});
+
+
+
+let generateCreateObjPayload = function (documentType) {
+  let createObjPayload = {
+    '_type': 'dcx:',
+    'fields': {
+      'Type': [ {
+        '_id': 'dcxapi:tm_topic/documenttype-text',
+        '_type': 'dcx:tm_topic'
+      }]
+    },
+    'properties': {
+      'pool_id': {
+        '_id': '/dcx/api/pool/native',
+        '_type': 'dcx:pool'
+      }
+    }
+  };
+  createObjPayload['_type'] += documentType;
+  return JSON.stringify(createObjPayload , null, ' ');
+}
+
+let handleCreateObjParam = function () {
+  $('#createobj__type').change(function(){
+    $('#createobj__parameters').val(generateCreateObjPayload($(this).children("option:selected").val()));
+  });
+
+  // initial value
+  $('#createobj__parameters').val(generateCreateObjPayload($('#createobj__type').children("option:selected").val()));
+}();
+
+
+
 $('#createobj__form').submit(function( event ) {
   let createPayload, createQuery = {};
 
   if( '' != $(this).find('#createobj__type').val()) {
-    createPayload = {
-      '_type': 'dcx:' + $(this).find('#createobj__type').val(),
-      'fields': {
-        'Type': [ {
-            '_id': 'dcxapi:tm_topic/documenttype-text',
-            '_type': 'dcx:tm_topic'
-          }]
-      },
-      'properties': {
-        'pool_id': {
-          '_id': '/dcx/api/pool/native',
-          '_type': 'dcx:pool'
-        }
-      }
-    };
-
+    let rawPayload = $('#createobj__parameters').val();
+    createPayload = JSON.parse(rawPayload);
     createQuery = {
       's' : {
         'fields': '*',
@@ -108,7 +139,6 @@ $('#createobj__form').submit(function( event ) {
       },
     };
   }
-
   sdkClient.createObject({
     requestUrl: $(this).find('#createobj__type').val(),
     query: createQuery,
@@ -185,20 +215,16 @@ $('#getstream__form').submit(function( event ) {
         'responseText': JSON.parse(event.data)
       };
       setOutput(...[true, 'getstream', responseObj]);
-      debugger;
       }, false);
 
     response.stream.addEventListener('error', function (event) {
-      debugger;
       this.close();
       }, false);
 
     response.stream.addEventListener('open', (event) => {
-      debugger;
       }, false);
 
     response.stream.addEventListener('close', (event) => {
-      debugger;
     }, false);
 
     $('#stream__cancel').click(function() {

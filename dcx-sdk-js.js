@@ -4,6 +4,9 @@ module.exports.baseUrl = '';
 module.exports.apiUrl = 'api/';
 module.exports.bearerToken = false;
 
+// remove Cookie since DCX prioritize cookie data before bearer
+Document.cookie = '';
+
 module.exports.login = function(actionData) {
   var dataObj = {
     'grant_type': 'password',
@@ -18,6 +21,7 @@ module.exports.login = function(actionData) {
     'dataObjEncoded': exports.parseObjUrl(dataObj),
     'bearer': false
   };
+
 
   return exports.reqPromise(requestObj)
     .then((response) => {
@@ -55,13 +59,18 @@ module.exports.getObject = function(actionData) {
   return exports.reqPromise(requestObj);
 };
 
-module.exports.followLink = function(linkurl) {
+module.exports.followLink = function(linkurl, includebase = true) {
   if(!exports.bearerToken) { return exports.loginFail(); }
+  let url = linkurl
+  if (!includebase)
+  {
+    url =  exports.baseUrl + exports.apiUrl + linkurl
+  }
   let requestObj = {
     'method': 'GET',
     'dataType': 'application/x-www-form-urlencoded',
     'bearer': exports.bearerToken,
-    'absRequestUrl': exports.baseUrl + exports.apiUrl + linkurl,
+    'absRequestUrl': url,
     'dataObjEncoded': ''
   };
   return exports.reqPromise(requestObj);
@@ -113,7 +122,6 @@ module.exports.setObject = function(actionData) {
       return setObjectCallback(response.responseText);
     } else {
       return new Promise((resolve, reject) => {
-        debugger;
         reject({
           'status': '201',
           'message': 'No changes or Field not found.'
@@ -122,7 +130,6 @@ module.exports.setObject = function(actionData) {
     }
   }).catch((response) => {
       return new Promise((resolve, reject) => {
-        debugger;
         reject({
           'status': response.status,
           'message': response.message
@@ -202,11 +209,11 @@ module.exports.invokeaction = function(actionData) {
   if(!exports.bearerToken) { return exports.loginFail(); }
 
   let requestObj = {
-    'method': 'POST',
+    'method': (actionData.httpMethod != undefined) ? actionData.httpMethod : 'POST',
     'dataType': 'application/json; charset=UTF-8',
     'bearer': exports.bearerToken,
     'absRequestUrl': exports.baseUrl  + exports.apiUrl + actionData.requestUrl + '/' + actionData.id + '/actions/' + actionData.method +'/invoke?' + exports.parseObjUrl(actionData.query),
-    'dataObjEncoded': ''
+    'dataObjEncoded': (actionData.data != undefined) ? JSON.stringify(actionData.data) : ''
   };
   return exports.reqPromise(requestObj);
 };
@@ -238,7 +245,12 @@ module.exports.reqPromise = function (requestData) {
     xhr.onload = function () {
       let responseText = JSON.stringify({});
       if(xhr.responseText != '') {
-        responseText = JSON.parse(xhr.responseText);
+        try {
+          responseText = JSON.parse(xhr.responseText);
+        } catch(e) {
+          console.log('error while parsing JSON response from request');
+          responseText = JSON.stringify({});
+        }
       }
 
       let errorFlag = (typeof tmpResponseObj.error != 'undefined');
@@ -270,7 +282,6 @@ module.exports.reqPromise = function (requestData) {
     try {
       xhr.send(requestData.dataObjEncoded);
     } catch(err) {
-      debugger;
     }
   });
 };
