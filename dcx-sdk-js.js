@@ -245,7 +245,12 @@ module.exports.reqPromise = function (requestData) {
     xhr.onload = function () {
       let responseText = JSON.stringify({});
       if(xhr.responseText != '') {
-        responseText = JSON.parse(xhr.responseText);
+        try {
+          responseText = JSON.parse(xhr.responseText);
+        } catch(e) {
+          console.log('error while parsing JSON response from request');
+          responseText = JSON.stringify({});
+        }
       }
 
       let errorFlag = (typeof tmpResponseObj.error != 'undefined');
