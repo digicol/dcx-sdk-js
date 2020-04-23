@@ -173,6 +173,44 @@
         </div>
 
         <div class="card">
+          <div class="card-header" id="followlink">
+            <h5 class="mb-0">
+              <button class="btn btn-light collapsed mx-5" type="button" data-toggle="collapse" data-target="#followlink__card" aria-expanded="false"
+                 aria-controls="followlink__card">Follow Link</button>
+            </h5>
+          </div>
+          <div id="followlink__card" class="collapse" aria-labelledby="followlink" data-parent="#client__interface">
+            <div class="card-body">
+              <!-- Get object -->
+              <div class="col-12 mt-5">
+                <div class="row">
+                  <div class="col-5 followlink__wrapper">
+                    <div class="col-12 mt-4"><h3>Follow Link</h3></div>
+                    <div class="col-12 mt-3">/api/doctoutag?q[doc_id]=DOCID</div>
+                    <form id="followlink__form" class="p-3 offset-1 form-group" action="#" type="POST">
+
+                      <div class="mt-3 col-12">
+                        <label for="followlink__url">Object ID</label>
+                        <input type="text" name="objectid" value="https://dcxtrunk.digicol.de/dcx_trunk/api/doctoutag?q[doc_id]=monroex5xdx7s0q9gok9b9ap2x" class="form-control" id="followlink__url"/>
+                      </div>
+
+                      <div class="mt-5 col-6 offset-5 form-group">
+                        <input type="submit" value="Follow Link" class="form-control btn btn-primary"/>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-6 offset-1 followlink__output__wrapper pt-5">
+                    <div class="status alert" role="alert"></div>
+                    <div class="d-inline-block output alert alert-primary">...</div>
+                  </div>
+                </div>
+              </div>
+              <!-- /Get object -->
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
           <div class="card-header" id="getobjects">
             <h5 class="mb-0">
               <button class="btn btn-light collapsed mx-5" type="button" data-toggle="collapse" data-target="#getobjects__card" aria-expanded="false"
@@ -271,54 +309,60 @@
               <!-- Create object -->
               <div class="col-12 mt-5">
                 <div class="row">
-                  <div class="col-5 createobj__wrapper">
+                  <div class="col-7 createobj__wrapper">
                     <div class="col-12 mt-4"><h3>Create Object</h3></div>
                     <div class="col-12 mt-3">/api/{objectType}/</div>
                     <form id="createobj__form" class="p-3 offset-1 form-group" action="#" type="POST">
 
-                      <div class="mt-3 col-10 offset-2">
-                        <label for="createobj__field">Object type</label>
-                        <select name="url" class="form-control" id="createobj__type">
-                          <option value="channel">channel</option>
-                          <option value="comment">comment</option>
-                          <option value="configdef">configdef</option>
-                          <option value="configsetting">configsetting</option>
-                          <option value="device">device</option>
-                          <option value="doclink">doclink</option>
-                          <option value="doctorprof">doctorprof</option>
-                          <option value="doctoutag">doctoutag</option>
-                          <option value="document" selected>document</option>
-                          <option value="documentation">documentation</option>
-                          <option value="file">file</option>
-                          <option value="flag">flag</option>
-                          <option value="flagfunction">flagfunction</option>
-                          <option value="formcomponentconfig">formcomponentconfig</option>
-                          <option value="job">job</option>
-                          <option value="menuitem">menuitem</option>
-                          <option value="permdef">permdef</option>
-                          <option value="permission">permission</option>
-                          <option value="pool">pool</option>
-                          <option value="pubinfo">pubinfo</option>
-                          <option value="rights">rights</option>
-                          <option value="rightsprofile">rightsprofile</option>
-                          <option value="role">role</option>
-                          <option value="schedule">schedule</option>
-                          <option value="script">script</option>
-                          <option value="share">share</option>
-                          <option value="story">story</option>
-                          <option value="tagdef">tagdef</option>
-                          <option value="taggroupconfig">taggroupconfig</option>
-                          <option value="textindex">textindex</option>
-                          <option value="tm_association">tm_association</option>
-                          <option value="tm_occurrence">tm_occurrence</option>
-                          <option value="tm_topic">tm_topic</option>
-                          <option value="translation">translation</option>
-                          <option value="usersetting">usersetting</option>
-                          <option value="usertag">usertag</option>
-                          <option value="webactiondef">webactiondef</option>
-                          <option value="workflow">workflow</option>
-                          <option value="workflowstep">workflowstep</option>
-                        </select>
+                      <div class="mt-3 col-12">
+                        <div>
+                          <label for="createobj__field">Object type</label>
+                          <select name="url" class="form-control" id="createobj__type">
+                            <option value="channel">channel</option>
+                            <option value="comment">comment</option>
+                            <option value="configdef">configdef</option>
+                            <option value="configsetting">configsetting</option>
+                            <option value="device">device</option>
+                            <option value="doclink">doclink</option>
+                            <option value="doctorprof">doctorprof</option>
+                            <option value="doctoutag">doctoutag</option>
+                            <option value="document" selected>document</option>
+                            <option value="documentation">documentation</option>
+                            <option value="file">file</option>
+                            <option value="flag">flag</option>
+                            <option value="flagfunction">flagfunction</option>
+                            <option value="formcomponentconfig">formcomponentconfig</option>
+                            <option value="job">job</option>
+                            <option value="menuitem">menuitem</option>
+                            <option value="permdef">permdef</option>
+                            <option value="permission">permission</option>
+                            <option value="pool">pool</option>
+                            <option value="pubinfo">pubinfo</option>
+                            <option value="rights">rights</option>
+                            <option value="rightsprofile">rightsprofile</option>
+                            <option value="role">role</option>
+                            <option value="schedule">schedule</option>
+                            <option value="script">script</option>
+                            <option value="share">share</option>
+                            <option value="story">story</option>
+                            <option value="tagdef">tagdef</option>
+                            <option value="taggroupconfig">taggroupconfig</option>
+                            <option value="textindex">textindex</option>
+                            <option value="tm_association">tm_association</option>
+                            <option value="tm_occurrence">tm_occurrence</option>
+                            <option value="tm_topic">tm_topic</option>
+                            <option value="translation">translation</option>
+                            <option value="usersetting">usersetting</option>
+                            <option value="usertag">usertag</option>
+                            <option value="webactiondef">webactiondef</option>
+                            <option value="workflow">workflow</option>
+                            <option value="workflowstep">workflowstep</option>
+                          </select>
+                        </div>
+                        <div class="form-group mt-3">
+                          <label for="createobj__parameters">Parameters</label>
+                          <textarea class="form-control form-control-sm" id="createobj__parameters" rows="12"></textarea>
+                        </div>
                       </div>
 
                       <div class="mt-5 col-6 offset-5 form-group">
@@ -326,7 +370,7 @@
                       </div>
                     </form>
                   </div>
-                  <div class="col-6 offset-1 createobj__output__wrapper pt-5">
+                  <div class="col-5 createobj__output__wrapper pt-5">
                     <div class="status alert" role="alert"></div>
                     <div class="d-inline-block output alert alert-primary">...</div>
                   </div>
