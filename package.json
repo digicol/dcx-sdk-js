@@ -1,6 +1,6 @@
 {
   "name": "dcx-sdk-js",
-  "version": "1.9.1",
+  "version": "2.0.0",
   "description": "Basic JS SDK to work with DC-X.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
